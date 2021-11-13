@@ -1,0 +1,1 @@
+export const CalculadoraSimple = (list) => list.map((e) => 2)
