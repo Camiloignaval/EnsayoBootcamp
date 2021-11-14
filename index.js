@@ -6,15 +6,10 @@ const Swal = require('sweetalert2')
 
 
 const app = express();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use(express.static('public'));
 app.use(express.static('public/js'));
-
-// app.use('/static', express.static(__dirname + '/public'));
-
 
 
 app.listen(3000, () => {
@@ -27,7 +22,6 @@ app.get('/', async (req, res) => {
 
 app.get('/consulta/:cat', async (req, res) => {
     const { cat } = req.params;
-    console.log(cat)
 
     try {
         const productos = await consultaComboBox(cat);
