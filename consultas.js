@@ -19,14 +19,17 @@ const consultaComboBox = async (criterio) => {
     }
 };
 
-const consultaFiltrado = async () => {
-    consulta = `select t.store_name ,p.product_id ,p.product_name ,s.quantity from stocks s 
-  inner join stores t 
-  on s.store_id = t.store_id 
-  inner join products p 
-  on s.product_id = p.product_id 
-  inner join categories c 
-  on c.category_id = p.category_id `
+const consultaFiltrado = async (condition) => {
+    const consulta = `select t.store_name ,p.product_id ,p.product_name ,s.quantity from stocks s 
+    inner join stores t 
+    on s.store_id = t.store_id 
+    inner join products p 
+    on s.product_id = p.product_id 
+    inner join categories c 
+    on c.category_id = p.category_id
+    inner join brands b 
+    on b.brand_id = p.brand_id 
+    ${condition};`
 
     try {
         const result = await pool.query(consulta);

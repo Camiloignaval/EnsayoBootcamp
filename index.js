@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { consultaComboBox, consultaFiltrado } = require('./consultas');
+const { comprobacionParaFiltrar } = require('./public/js/validacionFiltrado');
+const Swal = require('sweetalert2')
+
 
 const app = express();
 
@@ -37,12 +40,27 @@ app.get('/consulta/:cat', async (req, res) => {
     }
 })
 
-app.get('/filtrado/', async (req, res) => {
-    // const { cat } = req.params;
-    // console.log(cat)
+app.get('/producto/:id', async (req, res) => {
+    const { id } = req.params;
 
     try {
-        const productos = await consultaFiltrado();
+        const productos = await consultaComboBox(`products p where p.product_id=${id}`);
+        res.status(200).send(JSON.stringify(productos))
+    } catch (e) {
+        res.status(500).send({
+            error: `Algo salio mal...${e}`,
+            code: 500
+        })
+    }
+})
+
+app.get('/filtrado/:store&:category&:brand', async (req, res) => {
+    const { store, category, brand } = req.params;
+    const condition = comprobacionParaFiltrar(store, category, brand)
+
+    try {
+        const productos = await consultaFiltrado(condition);
+
         res.status(200).send(JSON.stringify(productos))
     } catch (e) {
         res.status(500).send({
